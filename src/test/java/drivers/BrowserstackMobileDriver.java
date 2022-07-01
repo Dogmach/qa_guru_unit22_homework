@@ -12,29 +12,28 @@ import java.net.URL;
 
 public class BrowserstackMobileDriver implements WebDriverProvider {
 
+    @Override
+    public WebDriver createDriver(Capabilities capabilities) {
+        MutableCapabilities mutableCapabilities = new MutableCapabilities();
+        mutableCapabilities.merge(capabilities);
+        mutableCapabilities.setCapability("browserstack.appium_version", Credentials.config.appiumVersion());
+        mutableCapabilities.setCapability("browserstack.user", Credentials.config.user());
+        mutableCapabilities.setCapability("browserstack.key", Credentials.config.key());
+        mutableCapabilities.setCapability("app", Credentials.config.app());
+        mutableCapabilities.setCapability("device", "Samsung Galaxy A10");
+        mutableCapabilities.setCapability("os_version", "9.0");
+        mutableCapabilities.setCapability("project", "QA.GURU lesson MobileAutotests");
+        mutableCapabilities.setCapability("build", "Autotests browserstack");
+        mutableCapabilities.setCapability("name", "Test Wikipedia App");
+
+        return new RemoteWebDriver(getBrowserstackUrl(), mutableCapabilities);
+    }
+
     public static URL getBrowserstackUrl() {
         try {
-            return new URL(Credentials.configBro.url());
+            return new URL(Credentials.config.url());
         } catch (MalformedURLException e) {
             throw new RuntimeException(e);
         }
-    }
-
-    @Override
-    public WebDriver createDriver(Capabilities caps) {
-        MutableCapabilities mutableCapabilities = new MutableCapabilities();
-        mutableCapabilities.merge(caps);
-
-        mutableCapabilities.setCapability("browserstack.appium_version", "1.22.0");
-        mutableCapabilities.setCapability("browserstack.user", Credentials.configBro.user());
-        mutableCapabilities.setCapability("browserstack.key", Credentials.configBro.key());
-        mutableCapabilities.setCapability("app", Credentials.configBro.app());
-        mutableCapabilities.setCapability("device", "Samsung Galaxy S22 Plus");
-        mutableCapabilities.setCapability("os_version", "12.0");
-        mutableCapabilities.setCapability("project", "First Java Project");
-        mutableCapabilities.setCapability("build", "browserstack-build-1");
-        mutableCapabilities.setCapability("name", "first_test");
-
-        return new RemoteWebDriver(getBrowserstackUrl(), mutableCapabilities);
     }
 }
