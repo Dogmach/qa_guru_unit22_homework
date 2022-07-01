@@ -7,9 +7,6 @@ repositories {
     mavenCentral()
 }
 
-group 'guru.qa'
-version '1.0'
-
 def allureVersion = "2.17.3",
     selenideVersion = "6.4.0",
     appiumVersion = "8.0.0",
@@ -17,9 +14,6 @@ def allureVersion = "2.17.3",
     slf4jVersion = "1.7.32"
 
 allure {
-    report {
-        version.set(allureVersion)
-    }
     adapter {
         aspectjWeaver.set(true)
         frameworks {
@@ -28,10 +22,14 @@ allure {
             }
         }
     }
+    report {
+        version.set(allureVersion)
+    }
 }
 
 dependencies {
     testImplementation(
+            "org.aeonbits.owner:owner:1.0.12",
             "com.codeborne:selenide:$selenideVersion",
             "io.qameta.allure:allure-selenide:$allureVersion",
             "io.appium:java-client:$appiumVersion",
@@ -52,6 +50,7 @@ tasks.withType(Test) {
 
     testLogging {
         lifecycle {
+//            events "started", "failed"
             events "started", "skipped", "failed", "standard_error", "standard_out"
             exceptionFormat "short"
         }
